@@ -35,9 +35,11 @@ Player Profile Plus is a work in progress. Features, compatibility, and availabi
 - **Developer:** MorphoTheNoob
 - **Mod Loader & SDK:** [Geode](https://geode-sdk.org/)
 
-## 📜 License
+## 📚 Documentation
 
-This project is licensed under the MIT License. See [license.txt](license.txt) for details.
+- [Changelog](CHANGELOG.md)
+- [Contributing Guide](CONTRIBUTING.md)
+- [License](license.txt)
 
 ---
 
