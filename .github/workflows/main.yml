@@ -1,0 +1,25 @@
+name: Build Player Profile Plus
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Geode mod
+        uses: geode-sdk/build-geode-mod@main
+        with:
+          target: Win64
+
+      - name: Upload build
+        uses: actions/upload-artifact@v4
+        with:
+          name: Player-Profile-Plus
+          path: build/**/*.geode
+          if-no-files-found: warn
