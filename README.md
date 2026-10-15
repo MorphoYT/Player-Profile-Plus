@@ -1,18 +1,46 @@
-
 # 🎮 Player Profile Plus
 
-**Created by MorphoTheNoob**
+**A Geometry Dash profile enhancement mod for Geode.**
 
-Upgrade your Geometry Dash profile with a stylish interface!
+Created with 💙 by **MorphoTheNoob**.
+
+---
+
+## 📖 About
+
+Player Profile Plus aims to enhance the Geometry Dash player profile experience with additional statistics, achievements, and a clean, user-friendly interface.
 
 ## ✨ Planned Features
-- 👤 Custom player profile card
-- 📊 Player statistics
-- 🏆 Achievement showcase
-- ⭐ Favorite level display
-- 🎨 Custom themes
 
-## 🚧 Status
-Currently in development.
+- 📊 **Player Statistics** — Explore player stats in one place.
+- 🏆 **Achievements & Milestones** — Track achievements and progress.
+- 👤 **Enhanced Profile Interface** — Give player profiles a fresh experience.
+- 🎨 **Clean Design** — Enjoy a simple and user-friendly interface.
 
-*Your profile. Your progress. Your style.*
+*Features are planned and may change during development.*
+
+## 🚧 Development Status
+
+**Currently in development!**
+
+Player Profile Plus is a work in progress. Features, compatibility, and availability may change as development continues.
+
+## 📋 Requirements
+
+- Geometry Dash
+- [Geode Mod Loader](https://geode-sdk.org/)
+
+## 👨‍💻 Credits
+
+- **Developer:** MorphoTheNoob
+- **Mod Loader & SDK:** [Geode](https://geode-sdk.org/)
+
+## 📜 License
+
+This project is licensed under the MIT License. See [LICENSE.txt](LICENSE.txt) for details.
+
+---
+
+⭐ **Thanks for checking out Player Profile Plus!**
+
+*More features coming in the future. Stay tuned!*
