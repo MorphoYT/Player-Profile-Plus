@@ -9,6 +9,7 @@ if (NOT DEFINED ENV{GEODE_SDK})
     message(FATAL_ERROR "GEODE_SDK is not set")
 endif()
 
+set(GEODE_DISABLE_FMT_CONSTEVAL ON CACHE BOOL "" FORCE)
 add_subdirectory($ENV{GEODE_SDK} ${CMAKE_CURRENT_BINARY_DIR}/geode)
 
 file(GLOB_RECURSE SOURCES src/*.cpp)
