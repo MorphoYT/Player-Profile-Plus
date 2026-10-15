@@ -1,3 +1,4 @@
+```yaml
 name: Build Player Profile Plus
 
 on:
@@ -16,6 +17,7 @@ jobs:
         uses: geode-sdk/build-geode-mod@main
         with:
           target: Win64
+          configure-args: -DGEODE_DISABLE_FMT_CONSTEVAL=ON
 
       - name: Upload build
         uses: actions/upload-artifact@v4
@@ -23,3 +25,4 @@ jobs:
           name: Player-Profile-Plus
           path: build/**/*.geode
           if-no-files-found: warn
+```
