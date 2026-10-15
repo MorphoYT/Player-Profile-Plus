@@ -1,0 +1,12 @@
+
+{
+  "geode": "4.0.0",
+  "gd": {
+    "win": "2.2074"
+  },
+  "id": "morphothenoob.player_profile_plus",
+  "name": "Player Profile Plus",
+  "version": "1.0.0",
+  "developer": "MorphoTheNoob",
+  "description": "Upgrade your Geometry Dash profile with player stats, achievements, favorite levels, and custom themes."
+}
