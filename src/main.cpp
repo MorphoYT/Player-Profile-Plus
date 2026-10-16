@@ -27,10 +27,13 @@ class $modify(ProfilePlusMenu, MenuLayer) {
             menu_selector(ProfilePlusMenu::openProfile)
         );
 
-        if (auto menu = this->getChildByID("bottom-menu")) {
-            menu->addChild(button);
+        if (button) {
             button->setID("profile-plus-button"_spr);
-            menu->updateLayout();
+
+            if (auto menu = this->getChildByID("bottom-menu")) {
+                menu->addChild(button);
+                menu->updateLayout();
+            }
         }
 
         return true;
@@ -39,12 +42,20 @@ class $modify(ProfilePlusMenu, MenuLayer) {
     void openProfile(CCObject*) {
         FLAlertLayer::create(
             "PLAYER PROFILE PLUS",
-            "Welcome to your enhanced profile!\\n\\n"
-            "PLAYER STATS\\n"
-            "Your Geometry Dash statistics will appear here.\\n\\n"
-            "ACHIEVEMENTS\\n"
-            "Your milestones are coming soon!",
-            "LET'S GO!"
+            "WELCOME, PLAYER!\n\n"
+            "====================\n"
+            "PLAYER STATISTICS\n"
+            "====================\n\n"
+            "Stars: Coming soon\n"
+            "Diamonds: Coming soon\n"
+            "Demons: Coming soon\n"
+            "User Coins: Coming soon\n\n"
+            "====================\n"
+            "ACHIEVEMENTS\n"
+            "====================\n\n"
+            "Your milestones are coming soon!\n\n"
+            "Thanks for playing!",
+            "CLOSE"
         )->show();
     }
 };
