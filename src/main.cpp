@@ -1,53 +1,65 @@
-
 #include <Geode/Geode.hpp>
 #include <Geode/ui/Popup.hpp>
 #include <Geode/modify/MenuLayer.hpp>
 
 using namespace geode::prelude;
 
-class ProfilePlusPopup : public Popup<> {
+class ProfilePlusPopup : public geode::Popup<> {
 protected:
     bool setup() override {
-        this->setTitle("PLAYER PROFILE PLUS", "goldFont.fnt", 0.6f);
+        this->setTitle("PLAYER PROFILE PLUS");
 
-        auto heading = CCLabelBMFont::create(
+        auto title = CCLabelBMFont::create(
             "PLAYER STATISTICS",
-            "bigFont.fnt"
-        );
-        heading->setScale(0.45f);
-        heading->setColor({255, 220, 55});
-        heading->setPosition({m_size.width / 2, m_size.height - 55});
-        m_mainLayer->addChild(heading);
-
-        auto stats = CCLabelBMFont::create(
-            "STARS: COMING SOON\n"
-            "DIAMONDS: COMING SOON\n"
-            "DEMONS: COMING SOON\n"
-            "USER COINS: COMING SOON",
-            "bigFont.fnt"
-        );
-        stats->setScale(0.35f);
-        stats->setAlignment(kCCTextAlignmentCenter);
-        stats->setColor({255, 255, 255});
-        stats->setPosition({m_size.width / 2, m_size.height / 2 + 8});
-        m_mainLayer->addChild(stats);
-
-        auto achievements = CCLabelBMFont::create(
-            "ACHIEVEMENTS",
-            "bigFont.fnt"
-        );
-        achievements->setScale(0.4f);
-        achievements->setColor({100, 255, 100});
-        achievements->setPosition({m_size.width / 2, 48});
-        m_mainLayer->addChild(achievements);
-
-        auto note = CCLabelBMFont::create(
-            "MORE FEATURES COMING SOON!",
             "goldFont.fnt"
         );
-        note->setScale(0.3f);
-        note->setPosition({m_size.width / 2, 27});
-        m_mainLayer->addChild(note);
+        title->setScale(0.45f);
+        title->setPosition({
+            m_size.width / 2.f,
+            m_size.height - 42.f
+        });
+        m_mainLayer->addChild(title);
+
+        const char* names[] = {
+            "STARS",
+            "DIAMONDS",
+            "DEMONS",
+            "USER COINS"
+        };
+
+        for (int i = 0; i < 4; i++) {
+            float x = m_size.width / 2.f
+                + ((i % 2 == 0) ? -57.f : 57.f);
+            float y = m_size.height - 79.f
+                - (i / 2) * 48.f;
+
+            auto name = CCLabelBMFont::create(
+                names[i],
+                "goldFont.fnt"
+            );
+            name->setScale(0.35f);
+            name->setPosition({x, y});
+            m_mainLayer->addChild(name);
+
+            auto value = CCLabelBMFont::create(
+                "COMING SOON",
+                "bigFont.fnt"
+            );
+            value->setScale(0.27f);
+            value->setPosition({x, y - 17.f});
+            m_mainLayer->addChild(value);
+        }
+
+        auto footer = CCLabelBMFont::create(
+            "MORE FEATURES SOON!",
+            "bigFont.fnt"
+        );
+        footer->setScale(0.32f);
+        footer->setPosition({
+            m_size.width / 2.f,
+            24.f
+        });
+        m_mainLayer->addChild(footer);
 
         return true;
     }
@@ -56,7 +68,7 @@ public:
     static ProfilePlusPopup* create() {
         auto ret = new ProfilePlusPopup();
 
-        if (ret->init(240.f, 180.f)) {
+        if (ret->init(260.f, 190.f)) {
             ret->autorelease();
             return ret;
         }
@@ -68,9 +80,12 @@ public:
 
 class $modify(ProfilePlusMenu, MenuLayer) {
     bool init() {
-        if (!MenuLayer::init()) {
+        if (!MenuLayer::init())
             return false;
-        }
+
+        auto menu = this->getChildByID("bottom-menu");
+        if (!menu)
+            return true;
 
         auto sprite = ButtonSprite::create(
             "PROFILE+",
@@ -85,11 +100,9 @@ class $modify(ProfilePlusMenu, MenuLayer) {
             menu_selector(ProfilePlusMenu::openProfile)
         );
 
-        if (auto menu = this->getChildByID("bottom-menu")) {
-            menu->addChild(button);
-            button->setID("profile-plus-button"_spr);
-            menu->updateLayout();
-        }
+        button->setID("profile-plus-button"_spr);
+        menu->addChild(button);
+        menu->updateLayout();
 
         return true;
     }
