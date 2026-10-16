@@ -39,7 +39,7 @@ Player Profile Plus is a work in progress. Features, compatibility, and availabi
 
 - [Changelog](CHANGELOG.md)
 - [Contributing Guide](CONTRIBUTING.md)
-- [License](license.txt)
+- [License](LICENSE.txt)
 
 ---
 
