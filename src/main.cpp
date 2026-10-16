@@ -10,18 +10,27 @@ class $modify(ProfilePlusMenu, MenuLayer) {
             return false;
         }
 
+        auto sprite = ButtonSprite::create(
+            "PROFILE+",
+            90,
+            0,
+            0.7f,
+            true,
+            "goldFont.fnt",
+            "GJ_button_01.png",
+            30.0f
+        );
+
         auto button = CCMenuItemSpriteExtra::create(
-            ButtonSprite::create("My Profile"),
+            sprite,
             this,
             menu_selector(ProfilePlusMenu::openProfile)
         );
 
-        if (button) {
-            if (auto menu = this->getChildByID("bottom-menu")) {
-                menu->addChild(button);
-                button->setPosition({-100.f, 0.f});
-                button->setID("profile-plus-button"_spr);
-            }
+        if (auto menu = this->getChildByID("bottom-menu")) {
+            menu->addChild(button);
+            button->setID("profile-plus-button"_spr);
+            menu->updateLayout();
         }
 
         return true;
@@ -29,9 +38,13 @@ class $modify(ProfilePlusMenu, MenuLayer) {
 
     void openProfile(CCObject*) {
         FLAlertLayer::create(
-            "Player Profile Plus",
-            "Welcome, MorphoTheNoob! Your profile starts here.",
-            "Close"
+            "PLAYER PROFILE PLUS",
+            "Welcome to your enhanced profile!\\n\\n"
+            "PLAYER STATS\\n"
+            "Your Geometry Dash statistics will appear here.\\n\\n"
+            "ACHIEVEMENTS\\n"
+            "Your milestones are coming soon!",
+            "LET'S GO!"
         )->show();
     }
 };
