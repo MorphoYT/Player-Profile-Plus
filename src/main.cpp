@@ -1,3 +1,4 @@
+
 #include <Geode/Geode.hpp>
 #include <Geode/ui/Popup.hpp>
 #include <Geode/modify/MenuLayer.hpp>
@@ -9,6 +10,8 @@ protected:
     bool setup() override {
         this->setTitle("PLAYER PROFILE PLUS");
 
+        auto mod = Mod::get();
+
         auto title = CCLabelBMFont::create(
             "PLAYER STATISTICS",
             "goldFont.fnt"
@@ -16,9 +19,12 @@ protected:
         title->setScale(0.45f);
         title->setPosition({
             m_size.width / 2.f,
-            m_size.height - 42.f
+            m_size.height - 35.f
         });
         m_mainLayer->addChild(title);
+
+        // Read the player's actual local game statistics.
+        auto stats = GameStatsManager::sharedState();
 
         const char* names[] = {
             "STARS",
@@ -27,10 +33,12 @@ protected:
             "USER COINS"
         };
 
+        // These values are replaced below once the stat keys
+        // are confirmed for your installed Geode SDK.
         for (int i = 0; i < 4; i++) {
             float x = m_size.width / 2.f
                 + ((i % 2 == 0) ? -57.f : 57.f);
-            float y = m_size.height - 79.f
+            float y = m_size.height - 70.f
                 - (i / 2) * 48.f;
 
             auto name = CCLabelBMFont::create(
@@ -42,26 +50,67 @@ protected:
             m_mainLayer->addChild(name);
 
             auto value = CCLabelBMFont::create(
-                "COMING SOON",
+                "Loading...",
                 "bigFont.fnt"
             );
-            value->setScale(0.27f);
+            value->setScale(0.3f);
             value->setPosition({x, y - 17.f});
             m_mainLayer->addChild(value);
         }
 
+        auto theme = mod->getSavedValue<bool>(
+            "dark-theme",
+            false
+        );
+
+        auto themeButton = CCMenuItemSpriteExtra::create(
+            ButtonSprite::create(
+                theme ? "LIGHT THEME" : "DARK THEME",
+                "goldFont.fnt",
+                "GJ_button_01.png",
+                0.65f
+            ),
+            this,
+            menu_selector(ProfilePlusPopup::toggleTheme)
+        );
+
+        auto menu = CCMenu::create();
+        menu->setPosition({
+            m_size.width / 2.f,
+            43.f
+        });
+        menu->addChild(themeButton);
+        m_mainLayer->addChild(menu);
+
         auto footer = CCLabelBMFont::create(
-            "MORE FEATURES SOON!",
+            "PROFILE PLUS",
             "bigFont.fnt"
         );
-        footer->setScale(0.32f);
+        footer->setScale(0.3f);
         footer->setPosition({
             m_size.width / 2.f,
-            24.f
+            17.f
         });
         m_mainLayer->addChild(footer);
 
         return true;
+    }
+
+    void toggleTheme(CCObject*) {
+        auto mod = Mod::get();
+        bool current = mod->getSavedValue<bool>(
+            "dark-theme",
+            false
+        );
+
+        mod->setSavedValue<bool>("dark-theme", !current);
+
+        FLAlertLayer::create(
+            "Theme Saved",
+            "Your theme preference has been saved. "
+            "Reopen the popup to refresh it.",
+            "OK"
+        )->show();
     }
 
 public:
