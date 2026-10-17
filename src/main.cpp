@@ -1,4 +1,4 @@
-#include <Geode/ui/BasedButtonSprite.hpp>
+
 #include <Geode/Geode.hpp>
 #include <Geode/ui/Popup.hpp>
 #include <Geode/modify/MenuLayer.hpp>
@@ -10,62 +10,60 @@ protected:
     bool setup() override {
         this->setTitle("PLAYER PROFILE PLUS");
 
-        auto mod = Mod::get();
-
         auto title = CCLabelBMFont::create(
-            "PLAYER STATISTICS",
+            "PLAYER PROFILE PLUS",
             "goldFont.fnt"
         );
-        title->setScale(0.45f);
+        title->setScale(0.42f);
         title->setPosition({
             m_size.width / 2.f,
-            m_size.height - 35.f
+            m_size.height - 30.f
         });
         m_mainLayer->addChild(title);
 
-        // Read the player's actual local game statistics.
-        auto stats = GameStatsManager::sharedState();
+        auto statsTitle = CCLabelBMFont::create(
+            "PLAYER STATISTICS",
+            "goldFont.fnt"
+        );
+        statsTitle->setScale(0.38f);
+        statsTitle->setPosition({
+            m_size.width / 2.f,
+            m_size.height - 57.f
+        });
+        m_mainLayer->addChild(statsTitle);
 
-        const char* names[] = {
-            "STARS",
-            "DIAMONDS",
-            "DEMONS",
-            "USER COINS"
-        };
+        auto statsNote = CCLabelBMFont::create(
+            "Stats API integration needed",
+            "bigFont.fnt"
+        );
+        statsNote->setScale(0.31f);
+        statsNote->setPosition({
+            m_size.width / 2.f,
+            m_size.height - 82.f
+        });
+        m_mainLayer->addChild(statsNote);
 
-        // These values are replaced below once the stat keys
-        // are confirmed for your installed Geode SDK.
-        for (int i = 0; i < 4; i++) {
-            float x = m_size.width / 2.f
-                + ((i % 2 == 0) ? -57.f : 57.f);
-            float y = m_size.height - 70.f
-                - (i / 2) * 48.f;
+        auto mod = Mod::get();
 
-            auto name = CCLabelBMFont::create(
-                names[i],
-                "goldFont.fnt"
-            );
-            name->setScale(0.35f);
-            name->setPosition({x, y});
-            m_mainLayer->addChild(name);
-
-            auto value = CCLabelBMFont::create(
-                "Loading...",
-                "bigFont.fnt"
-            );
-            value->setScale(0.3f);
-            value->setPosition({x, y - 17.f});
-            m_mainLayer->addChild(value);
-        }
-
-        auto theme = mod->getSavedValue<bool>(
+        bool darkTheme = mod->getSavedValue<bool>(
             "dark-theme",
             false
         );
 
+        auto themeLabel = CCLabelBMFont::create(
+            darkTheme ? "THEME: DARK" : "THEME: DEFAULT",
+            "goldFont.fnt"
+        );
+        themeLabel->setScale(0.34f);
+        themeLabel->setPosition({
+            m_size.width / 2.f,
+            m_size.height - 112.f
+        });
+        m_mainLayer->addChild(themeLabel);
+
         auto themeButton = CCMenuItemSpriteExtra::create(
             ButtonSprite::create(
-                theme ? "LIGHT THEME" : "DARK THEME",
+                "TOGGLE THEME",
                 "goldFont.fnt",
                 "GJ_button_01.png",
                 0.65f
@@ -74,22 +72,38 @@ protected:
             menu_selector(ProfilePlusPopup::toggleTheme)
         );
 
+        auto favoritesButton = CCMenuItemSpriteExtra::create(
+            ButtonSprite::create(
+                "FAVORITES",
+                "goldFont.fnt",
+                "GJ_button_01.png",
+                0.65f
+            ),
+            this,
+            menu_selector(ProfilePlusPopup::showFavorites)
+        );
+
         auto menu = CCMenu::create();
         menu->setPosition({
             m_size.width / 2.f,
-            43.f
+            52.f
         });
         menu->addChild(themeButton);
+        menu->addChild(favoritesButton);
+
+        themeButton->setPosition({0.f, 10.f});
+        favoritesButton->setPosition({0.f, -25.f});
+
         m_mainLayer->addChild(menu);
 
         auto footer = CCLabelBMFont::create(
-            "PROFILE PLUS",
+            "PLAYER PROFILE PLUS",
             "bigFont.fnt"
         );
-        footer->setScale(0.3f);
+        footer->setScale(0.28f);
         footer->setPosition({
             m_size.width / 2.f,
-            17.f
+            16.f
         });
         m_mainLayer->addChild(footer);
 
@@ -98,6 +112,7 @@ protected:
 
     void toggleTheme(CCObject*) {
         auto mod = Mod::get();
+
         bool current = mod->getSavedValue<bool>(
             "dark-theme",
             false
@@ -106,9 +121,27 @@ protected:
         mod->setSavedValue<bool>("dark-theme", !current);
 
         FLAlertLayer::create(
-            "Theme Saved",
-            "Your theme preference has been saved. "
-            "Reopen the popup to refresh it.",
+            "Theme Preference Saved",
+            "Your preference was saved. Reopen the popup "
+            "to see the updated theme label.",
+            "OK"
+        )->show();
+
+        this->onClose(nullptr);
+        ProfilePlusPopup::create()->show();
+    }
+
+    void showFavorites(CCObject*) {
+        auto favorites = Mod::get()->getSavedValue<std::string>(
+            "favorite-level-ids",
+            ""
+        );
+
+        FLAlertLayer::create(
+            "Favorite Levels",
+            favorites.empty()
+                ? "You have no saved favorite level IDs yet."
+                : favorites.c_str(),
             "OK"
         )->show();
     }
@@ -117,7 +150,7 @@ public:
     static ProfilePlusPopup* create() {
         auto ret = new ProfilePlusPopup();
 
-        if (ret->init(260.f, 190.f)) {
+        if (ret->init(260.f, 210.f)) {
             ret->autorelease();
             return ret;
         }
@@ -136,11 +169,23 @@ class $modify(ProfilePlusMenu, MenuLayer) {
         if (!menu)
             return true;
 
-        auto sprite = ButtonSprite::create(
-            "PROFILE+",
-            "goldFont.fnt",
-            "GJ_button_01.png",
-            0.8f
+        auto icon = CCSprite::createWithSpriteFrameName(
+            "GJ_likeBtn_001.png"
+        );
+
+        if (!icon) {
+            icon = CCSprite::createWithSpriteFrameName(
+                "GJ_infoIcon_001.png"
+            );
+        }
+
+        if (!icon)
+            return true;
+
+        auto sprite = CircleButtonSprite::create(
+            icon,
+            CircleBaseColor::Green,
+            CircleBaseSize::Medium
         );
 
         auto button = CCMenuItemSpriteExtra::create(
